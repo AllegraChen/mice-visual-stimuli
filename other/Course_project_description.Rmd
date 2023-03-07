@@ -1,0 +1,119 @@
+---
+title: "Course Project Description"
+date: " "
+output: html_document
+---
+
+## Overview
+
+This document contains instructions on the **course project** for STA 207 Winter 2023. This document is made with `R markdown`. The `rmd` file to generate this document is available on the course website. 
+
+# Background
+
+
+In this project, we analyze a subset of data collected by Steinmetz et al. (2019). While this document provides the basic understanding of the experiments, it is highly recommended that one consults the original publication for a more comprehensive understanding in order to improve the quality of the analysis report.
+
+
+In the study conducted by Steinmetz et al. (2019), experiments were performed on a total of 10 mice over 39 sessions. Each session comprised several hundred trials, during which visual stimuli were randomly presented to the mouse on two screens positioned on both sides of it. The stimuli varied in terms of contrast levels, which took values in {0, 0.25, 0.5, 1}, with 0 indicating the absence of a stimulus. The mice were required to make decisions based on the visual stimuli, using a wheel controlled by their forepaws. A reward or penalty was subsequently administered based on the outcome of their decisions. The activity of the neurons in the mice's visual cortex was recorded during the trials and made available in the form of spike trains, which are collections of timestamps corresponding to neuron firing. 
+
+In this project, we focus specifically on the spike trains of neurons in the visual cortex, from the onset of the stimuli to 0.4 seconds post-onset. In addition, we only use five sessions (Sessions 1 to 5) from two mice (Cori and Frossman).
+
+
+# Data structure 
+
+---
+
+A total of 5 RDS files are provided that contain the records from five sessions. In each RDS file, you can find the name of mouse from `mouse_name` and date of the experiment from `date_exp`. 
+
+
+```{r echo=TRUE, eval=TRUE}
+session=list()
+for(i in 1:5){
+  session[[i]]=readRDS(paste('./Data/session',i,'.rds',sep=''))
+  print(session[[i]]$mouse_name)
+  print(session[[i]]$date_exp)
+  
+}
+```
+
+Five variables are available for each trial, namely 
+
+- `feedback_type`: type of the feedback, 1 for success and -1 for failure
+- `contrast_left`: contrast of the left stimulus
+- `contrast_right`: contrast of the right stimulus
+- `time`: centers of the time bins for `spks`  
+- `spks`: numbers of spikes of neurons in the visual cortex in time bins defined in `time`
+
+```{r echo=TRUE, eval=FALSE}
+# Rename eval=TRUE if you want the output to appear in the report.
+# Take the 11th trial in Session 1 for example
+id=11
+session[[1]]$feedback_type[id]
+session[[1]]$contrast_left[id]
+session[[1]]$contrast_right[id]
+length(session[[1]]$time[[id]])
+dim(session[[1]]$spks[[id]])
+
+```
+
+# Questions of Interest
+
+
+The primary objectives of this project is to understand how the neural activity in the visual cortex is modulated by the two stimuli and how this information can be utilized to predict the outcome of the trial. To be specific, two questions of interest are as follows. 
+
+1. How do neurons in the visual cortex respond to the stimuli presented on the left and right? (35 pts)
+
+2. How to predict the outcome of each trial using the neural activities and stimuli? (5 pts)
+
+
+For Question 1, various methodologies can be employed to formulate statistically sound hypotheses that align with the research objective. In particular, we would like to know if the left and right stimuli have additive effects on the neural responses (i.e., whether the interaction effect exists). A suggested model and hypothesis can be found in the provided outline below. However, **alternative models or hypotheses may also be proposed**, but it is necessary to consult with the teaching assistants and obtain written approval from the instructor no later than March 6th.
+
+For Question 2, a variety of models may be employed for building the predictive model and the only criteria is to have the best prediction performance. Here the prediction performance is evaluated by the sensitivity and specificity evaluated on the first 100 trials in Session 1. Additionally, it may be possible to enhance the prediction performance by thoroughly analyzing the rewarding mechanism described in Steinmetz et al. (2019).
+
+# Suggested outline 
+
+In this project, you may utilize the template provided in the practice project as a guide. However, it is important to note that for consistency in grading, the final report must include all seven parts listed below, specifically an abstract and six main sections. 
+
+- Abstract.
+
+- Introduction. 
+
+- Background. Review and provide basic background of the experiment. 
+
+- Descriptive analysis. Explore the dataset and generate summary statistics and plots that you find informative, and explain your findings. Additionally, you should explicitly address the unique feature of this dataset, which is that each session contains varying numbers of neurons. An important task in this analysis is to define the outcome variable. One suggested approach is to use the mean firing rate, which is calculated as, for each trial, the average number of spikes per second across all neurons within a given 0.4 seconds time interval. However, even if this suggestion is followed, it is crucial that your report contains justification of this choice.
+
+```{r echo=TRUE, eval=TRUE} 
+# Obtain the firing rate 
+# averaged over [0,0.4] seconds since stim onsets
+# averaged across all neurons 
+
+ID=1
+t=0.4 # from Background 
+
+n.trials=length(session[[ID]]$spks)
+n.neurons=dim(session[[ID]]$spks[[1]])[1]
+
+# Obtain the firing rate 
+firingrate=numeric(n.trials)
+for(i in 1:n.trials){
+  firingrate[i]=sum(session[[ID]]$spks[[i]])/n.neurons/t
+}
+
+```
+
+
+- Inferential analysis (Q1). 
+Consider a  mixed effect model where the two fixed-effect factors are left contrast and right contrast, and a random intercept is included for each session. As a result, Q1 reduces to test the null hypothesis that the two factors have no interaction effect. 
+
+
+- Sensitivity analysis (Q1). Conduct model diagnostics and/or sensitivity analysis. In addition to the regular diagnostics, you should examine whether one need to account for the random effects from sessions. You may also explore using other statistics as outcomes.
+
+- Predictive modeling (Q2). Make sure that you do not use the first 100 trials in Session 1 in model training. 
+
+
+# Reference {-}
+
+
+Steinmetz, N.A., Zatka-Haas, P., Carandini, M. et al. Distributed coding of choice, action and engagement across the mouse brain. Nature 576, 266–273 (2019). https://doi.org/10.1038/s41586-019-1787-x
+
+

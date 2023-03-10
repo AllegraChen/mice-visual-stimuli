@@ -1,0 +1,107 @@
+---
+title: "Untitled"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+# Abstract
+
+# Introduction
+
+# Background
+
+## Requirements:
+Review & provide basic background of the experiment. (More on practice project outline)
+
+Experiment description:
+10 mice
+39 sessions (?QUESTIONS? WHAT ARE THE SESSIONS HERE?)
+    Each session comprised several hundred trials, same 1 mice
+        Each trial, visual stimuli with contrast levels, 1 left & 1 right screen, random
+            Stimuli contrast levels on each screen: 0 (absense), 0.25, 0.5, 1
+            Mice, forepaw controlled wheel, decide -> outcome -> reward/penalty
+            Record neoron activity in visual cortex -> spike trains (?QUESTION? WHATS THIS?) -> collections of timestamps == neuron firing
+            
+Project Scope:
+Spike trains from onset of the stimuli to 0.4s post-onset
+Session 1-5, mice Cori and Frossman
+
+Sample size:
+n=10 mice were used because this was a sufficient number to record n=29134 (?QUESTION? WHY? HOW TO GET THIS NUM?) neurons in n=42 (?QUESTIONS? HOW? RELATED TO OUR INTEREST?) brain regions, numbers which are greater than any previously published work. No statistical calculations were used to determine exactly how many neurons to record. (?QUESTION: DOES IT MEAN THAT THE COUNTS ARE EXACT/DETERMINISTIC?)
+
+Data exclusion: (?QUESTION? WHAT DOES THIS MEAN?)
+Behavioral trials were excluded when there were three or more miss trials in a row indicating disengagement; this criterion was pre- established. Neurons were excluded when the null hypothesis that their firing rate was un-modulated during the task could not be rejected according to a series of four tests for different types of modulation; this criterion was not determined in advance but was developed from data inspection.
+
+Replication:
+Recordings were undertaken in n=10 mice and a population of neurons recorded in each brain region in at least two of the mice.
+
+Randomization:
+Trial types during the behavioral task were interleaved randomly.
+
+7 variables:
+1. mouse_name
+2. date_exp
+3. feedback_type: 1 (succ) & -1 (fail)
+4. contrast_left: left stimulus contrast
+5. contrast_right: 
+6. time: centers of the time bins for spks (?QUESTION? WHAT DOES THIS MEAN? WHY DUPLICATE TIMES?)
+7. spks: num spikes in time bins defined in `time` (?QUESTION? HOW TO INTERPRET THIS VARIABLE? WHAT IS THE ROW AND COUMN NUM? ALL SESS HAVE 39 COL BUT DIFF ROW NUM.)
+
+Questions of Interest:
+1. How neurons respond to left and right stml? 
+    ?QUESTION? 
+    HOW TO DEFINE THIS HOW?
+    DID IT RESPOND? 
+    HOW EARLY THE FIRST NEURON? 
+    HOW MANY NEURONS? 
+    HOW FAST THE WHOLE TRANSMISSION PROCESS BTW NEURONS?
+    DIFF RESP FOR LEFT AND RIHGT? OR SAME?
+2. How to predict outcome of each trial using neural activities & stimuli?
+
+Method for Q1:
+- Formulate statistically sound hypotheses. 
+- Does the l n r stml have additive effects on the neural responses? 
+    i.e. whether the interaction effect exists.
+    model & hypo in outline
+
+Method for Q2:
+- Only goal of pred md: the best pred performance. Eval by the SENSITIVITY and SPECIFICITY evaluated on the first 100 trials in session 1.
+- Enhance the pred performance by throughly analyzing the reward mechanism described in Steinmetz et al. (2019).
+
+# Descriptive Analysis
+
+## Requirements:
+1. Summary stats, explain findings
+2. Plots, explain findings
+3. !IMPORTANT! Address the unique feature of this dataset, which is that each session contains varying numbers of neurons (?QUESTION? HOW TO SEE VARYING NUM OF NEURONS?)
+4. !IMPORTANT! Define the outcome var
+    Suggested approach: use the mean firing rate = for each trial, the avg num spikes per sec across all neurons within the 0.4s interval.
+    !IMPORTANT! Justify this choice of mean firing rate.
+    
+# Inferential Analysis
+Address Q1
+
+## Requirements
+1. Mixed effect model
+
+
+?QUESTOIN? 39 SESSIONS, FIRST SESSION: 214 TRIALS, 214 TIMESTAMPS FOR EACH SESSION? 533 SPIKES/NEURONS PER TIMESTAMP PER SESSION?
+
+```{r EDA}
+session=list()
+for(i in 1:5){
+  session[[i]]=readRDS(paste('data/session',i,'.rds',sep=''))
+  print(session[[i]]$mouse_name)
+  print(session[[i]]$date_exp)
+}
+
+str(session[[1]])
+```
+
+            
+
+# Reference
+
+Steinmetz, N.A., Zatka-Haas, P., Carandini, M. et al. Distributed coding of choice, action and engagement across the mouse brain. Nature 576, 266--273 (2019). <https://doi.org/10.1038/s41586-019-1787-x>
+
+Code: https://github.com/nsteinme/steinmetz-et-al-2019

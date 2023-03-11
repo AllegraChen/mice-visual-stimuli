@@ -4,11 +4,23 @@ output: html_document
 date: "`r Sys.Date()`"
 ---
 
+```{r Libraries}
+library(ggplot2)
+```
+
+### Progress so far: fully understand the given dataset, made 1 spike train raster plot of neuron 1 in trial 1 in session 1 for the mouse Cori, created structures and details to put in each section of the report.
+
 # Abstract
 
 # Introduction
 
 # Background
+
+In the study conducted by Steinmetz et al. (2019), experiments were performed on a total of 10 mice over 39 sessions, each composed of several hundred trials. Among the 39 sessions, 3 sessions (526 trials in total) were from the mouse named Cori and 4 sessions (904 trials in total) were from Forssmann. The analysis done in this project focuses specifically on the data from the 3 sessions on Cori and 2 sessions on Forssmann. From supplementary Table 2 of Steinmetz et al. (2019), all 3 sessions for Cori contained VIS-related regions. Only session from 2017-11-01 and 2017-11-02 contain recordings from VIS for Forssmann. TBU
+
+# Data Structure 
+
+In session 1 of Cori, 214 trials of experiment were performed. In each trial, information of the firing conditions of 178 neurons were collected. For each neuron, 39 timestamps were recorded. At each timestamp, the corresponding fire/no-fire status of the neuron was also recorded. A fire corresponds to the number 1 and vice versa in record. With the information, we can generate a spike raster plot (Fig.1) for neuron 1 in trial 1 from time 65.27941 second (the onset of the stimulus) to time 65.65941 second (0.38s or roughly 0.4s post-onset).
 
 ## Requirements:
 Review & provide basic background of the experiment. (More on practice project outline)
@@ -20,14 +32,14 @@ Experiment description:
         Each trial, visual stimuli with contrast levels, 1 left & 1 right screen, random
             Stimuli contrast levels on each screen: 0 (absense), 0.25, 0.5, 1
             Mice, forepaw controlled wheel, decide -> outcome -> reward/penalty
-            Record neoron activity in visual cortex -> spike trains (?QUESTION? WHATS THIS?) -> collections of timestamps == neuron firing
+            Record neUron activity in visual cortex -> spike trains (?QUESTION? WHATS THIS?) -> collections of timestamps == neuron firing
             
 Project Scope:
 Spike trains from onset of the stimuli to 0.4s post-onset
 Session 1-5, mice Cori and Frossman
 
 Sample size:
-n=10 mice were used because this was a sufficient number to record n=29134 (?QUESTION? WHY? HOW TO GET THIS NUM?) neurons in n=42 (?QUESTIONS? HOW? RELATED TO OUR INTEREST?) brain regions, numbers which are greater than any previously published work. No statistical calculations were used to determine exactly how many neurons to record. (?QUESTION: DOES IT MEAN THAT THE COUNTS ARE EXACT/DETERMINISTIC?)
+n=10 mice were used because this was a sufficient number to record n=29134 neurons in n=42 brain regions, numbers which are greater than any previously published work. No statistical calculations were used to determine exactly how many neurons to record, i.e. the counts are exact.
 
 Data exclusion: (?QUESTION? WHAT DOES THIS MEAN?)
 Behavioral trials were excluded when there were three or more miss trials in a row indicating disengagement; this criterion was pre- established. Neurons were excluded when the null hypothesis that their firing rate was un-modulated during the task could not be rejected according to a series of four tests for different types of modulation; this criterion was not determined in advance but was developed from data inspection.
@@ -41,7 +53,7 @@ Trial types during the behavioral task were interleaved randomly.
 7 variables:
 1. mouse_name
 2. date_exp
-3. feedback_type: 1 (succ) & -1 (fail)
+3. feedback_type: 1 (succ) & -1 (fail) (?QUESTION? HOW TO DEFINE THIS FEEDBACK?)
 4. contrast_left: left stimulus contrast
 5. contrast_right: 
 6. time: centers of the time bins for spks (?QUESTION? WHAT DOES THIS MEAN? WHY DUPLICATE TIMES?)
@@ -70,6 +82,8 @@ Method for Q2:
 
 # Descriptive Analysis
 
+?QUESTION? DOES DATE OF THE EXPERIMENT MATTER? 
+
 ## Requirements:
 1. Summary stats, explain findings
 2. Plots, explain findings
@@ -78,25 +92,96 @@ Method for Q2:
     Suggested approach: use the mean firing rate = for each trial, the avg num spikes per sec across all neurons within the 0.4s interval.
     !IMPORTANT! Justify this choice of mean firing rate.
     
+## Data Structure    
+39 sessions in total for 10 mice, 3 sessions specifically for mouse Cori
+Session 1 among the 3 session for Cori contains 214 trials, for each trial:
+    39 timestamps
+    there are 178 neurons
+    
+Spike raster plot:
+    trial_id vs time for each neuron
+    nueron_id vs time for each trial
+    
+```{r Provided Sample Code from Course Project Description Rmd file}
+#TODO# Add in reference section if this code is used
+
+session = list()
+for (i in 1:5) {
+  session[[i]] = readRDS(paste('data/session', i, '.rds', sep = ''))
+  print(session[[i]]$mouse_name)
+  print(session[[i]]$date_exp)
+}
+
+# Take the 11th trial in Session 1 for example
+id=11
+session[[1]]$feedback_type[id]
+session[[1]]$contrast_left[id]
+session[[1]]$contrast_right[id]
+length(session[[1]]$time[[id]])
+dim(session[[1]]$spks[[id]])
+
+# Obtain the firing rate 
+# averaged over [0,0.4] seconds since stim onsets
+# averaged across all neurons 
+
+ID=1
+t=0.4 # from Background 
+
+n.trials=length(session[[ID]]$spks)
+n.neurons=dim(session[[ID]]$spks[[1]])[1]
+
+# Obtain the firing rate 
+firingrate=numeric(n.trials)
+for(i in 1:n.trials){
+  firingrate[i]=sum(session[[ID]]$spks[[i]])/n.neurons/t
+}
+```
+
+
+```{r Spike trian raster plot}
+# Session 1 for the mouse Cori
+ID = 1
+t = 0.4 # from Background 
+
+n_trials = length(session[[ID]]$spks)
+n_neurons = dim(session[[ID]]$spks[[1]])[1]
+
+range_trials = 1:10
+range_neurons = 1:5
+
+session_1 = session[[ID]]
+
+
+trial_1_time = session_1$time[[1]]
+trial_1_time_from_stimulus = trial_1_time - trial_1_time[1]
+trial_1_neuron_1_spikes = session_1$spks[[1]][1,]
+
+temp_neuron_1_data = data.frame(trial = rep(1, 39),
+                                time_from_stimulus = trial_1_time_from_stimulus,
+                                spikes = trial_1_neuron_1_spikes)
+
+ggplot(data=temp_neuron_1_data,
+       mapping=aes(time_from_stimulus, spikes)) +
+    geom_linerange(mapping=aes(ymin=0, 
+                               ymax=spikes)) +
+    labs(caption="Fig.1 Spike raster plot for neuron 1 in trial 1 for Cori")
+```
+
+
+
+    
 # Inferential Analysis
 Address Q1
+
+?QUESTION? SPLIT PLOT WHOLE PLOT DESIGN (PIAZZA)
+
+Factors: left contrast, right contrast, mourse name
+outcome: firing rate across all neurons within the given 0.4 (0.38 caclulated from the timestamp difference from the data) seconds time interval.
 
 ## Requirements
 1. Mixed effect model
 
 
-?QUESTOIN? 39 SESSIONS, FIRST SESSION: 214 TRIALS, 214 TIMESTAMPS FOR EACH SESSION? 533 SPIKES/NEURONS PER TIMESTAMP PER SESSION?
-
-```{r EDA}
-session=list()
-for(i in 1:5){
-  session[[i]]=readRDS(paste('data/session',i,'.rds',sep=''))
-  print(session[[i]]$mouse_name)
-  print(session[[i]]$date_exp)
-}
-
-str(session[[1]])
-```
 
             
 
@@ -104,4 +189,21 @@ str(session[[1]])
 
 Steinmetz, N.A., Zatka-Haas, P., Carandini, M. et al. Distributed coding of choice, action and engagement across the mouse brain. Nature 576, 266--273 (2019). <https://doi.org/10.1038/s41586-019-1787-x>
 
-Code: https://github.com/nsteinme/steinmetz-et-al-2019
+Paper Source Code: https://github.com/nsteinme/steinmetz-et-al-2019
+
+
+
+
+
+# Resources that could be used as reference
+
+Code for plotting spike train raster plots in R:
+1. https://gist.github.com/Vindaar/9c32c0676ffddec9078e4c0917861fcd
+2. https://rdrr.io/rforge/STAR/man/raster.html
+3. https://rdrr.io/github/dpwynne/mmnst/man/RasterPlot.html
+4. https://www.imsbio.co.jp/RGM/R_rdfile?f=STAR/man/raster.Rd&d=R_CC
+
+Neural Encoding: http://www.columbia.edu/cu/appliedneuroshp/Spring2018/Spring18SHPAppliedNeuroLec3.pdf
+
+Spike raster plot & Normalized PSTH plot (Python): https://neuraldatascience.io/6-single_unit/intro_spike_trains.html
+

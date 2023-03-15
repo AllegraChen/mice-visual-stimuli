@@ -182,7 +182,7 @@ outcome: firing rate across all neurons within the given 0.4 (0.38 caclulated fr
 1. Mixed effect model
 - Random effect on the mice, Cori vs Forssmann
 
-
+?QUESTION? Causal effect, potential outcome framework for hypo testing?
             
 
 # Reference

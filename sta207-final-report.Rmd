@@ -180,7 +180,7 @@ outcome: firing rate across all neurons within the given 0.4 (0.38 caclulated fr
 
 ## Requirements
 1. Mixed effect model
-
+- Random effect on the mice, Cori vs Forssmann
 
 
             

@@ -173,6 +173,8 @@ ggplot(data=temp_neuron_1_data,
 # Inferential Analysis
 Address Q1
 
+?QUESTION? SIMPLE RANDOMIZED EXPERIMENT? ANYTHING TO SAY?
+
 ?QUESTION? SPLIT PLOT WHOLE PLOT DESIGN (PIAZZA)
 
 Factors: left contrast, right contrast, mourse name

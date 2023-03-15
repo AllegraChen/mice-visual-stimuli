@@ -183,7 +183,7 @@ outcome: firing rate across all neurons within the given 0.4 (0.38 caclulated fr
 - Random effect on the mice, Cori vs Forssmann
 
 ?QUESTION? Causal effect, potential outcome framework for hypo testing?
-            
+            Is date a random effect? What to do with date?
 
 # Reference
 

@@ -18,7 +18,7 @@ https://docs.google.com/spreadsheets/d/1nvPkP5FnNQr6VQhhbO-PnXX3uZbL9vHinB705Ek_
 1. The parts for Presentation and Discussion do not apply, since there are no such requirements this quarter.
 2. Regarding the expectation on the project:
 	a. 80/100 when the suggested outline is followed and only knowledge learned in STA 207 is used (plus or minus depending on the quality of the report)
-	b. >90/100 when the report addresses issues in the real data analysis that might require knowledge beyond STA 207. 
+	b. >90/100 when the report addresses issues in the real data analysis that might require knowledge beyond STA 207. E.g. you find some questions to solve in the published paper and try to solve the question. You just need to explain and try to convince your audience. There is no one correct solution/statistical method to any data analysis question.
 	* As discussed in Lecture: Course overview & logistics (1/9/2022), the median grade is expected to be B or B+, but it requires much more efforts to earn an A in this class. 
 
 # Other

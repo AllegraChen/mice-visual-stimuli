@@ -4,10 +4,6 @@ output: html_document
 date: "`r Sys.Date()`"
 ---
 
-```{r Libraries}
-library(ggplot2)
-```
-
 ### Progress so far: fully understand the given dataset, made 1 spike train raster plot of neuron 1 in trial 1 in session 1 for the mouse Cori, created structures and details to put in each section of the report.
 
 # Abstract
@@ -84,6 +80,10 @@ Method for Q2:
 
 ?QUESTION? DOES DATE OF THE EXPERIMENT MATTER? 
 
+
+#TODO# PLOT FOR FIRING RATES OF DIFFERENT MICE AND SESSIONS.
+Analysis: There seems to be a pattern of similarity for the same mouse.
+
 ## Requirements:
 1. Summary stats, explain findings
 2. Plots, explain findings
@@ -103,14 +103,9 @@ Spike raster plot:
     nueron_id vs time for each trial
     
 ```{r Provided Sample Code from Course Project Description Rmd file}
-#TODO# Add in reference section if this code is used
+#TODO# Add in reference section usage of code from description.Rmd file provided
 
-session = list()
-for (i in 1:5) {
-  session[[i]] = readRDS(paste('data/session', i, '.rds', sep = ''))
-  print(session[[i]]$mouse_name)
-  print(session[[i]]$date_exp)
-}
+
 
 # Take the 11th trial in Session 1 for example
 id=11
@@ -172,6 +167,15 @@ ggplot(data=temp_neuron_1_data,
     
 # Inferential Analysis
 Address Q1
+
+## Model and Model Assumptions
+
+$$Y_{ijkl} = \mu_{...} + \alpha_i + \beta_j + (\alpha \beta)_{ij} + \gamma_k + \epsilon_{ijkl}$$
+
+### Choice of Variables and Inclusion of Effects
+The mouse name, session ID and the experiment date are not included as random effects in purpose. Since the data was collected from only 2 mice, there are simply too few mouse samples to consider the random effects from different mice. In addition to the similar reason as that of the exclusion of mouse name, <the EDA plot #TODO# FILL IN WHICH FIGURE> does not illustrate a strong evidence that neurons perform randomly in each session or different dates. 
+
+
 
 ?QUESTION? SIMPLE RANDOMIZED EXPERIMENT? ANYTHING TO SAY?
 

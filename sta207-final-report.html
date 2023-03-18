@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2023-03-18" />
 
 <title>Untitled</title>
 
@@ -298,17 +298,23 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+content: "";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "\e258";
-font-family: 'Glyphicons Halflings';
+content: "";
 border: none;
+}
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "";
+font-family: 'Glyphicons Halflings';
+display: inline-block;
+padding: 10px;
+border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -350,7 +356,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">Untitled</h1>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2023-03-18</h4>
 
 </div>
 
@@ -376,7 +382,10 @@ several hundred trials. Among the 39 sessions, 3 sessions (526 trials in
 total) were from the mouse named Cori and 4 sessions (904 trials in
 total) were from Forssmann. The analysis done in this project focuses
 specifically on the data from the 3 sessions on Cori and 2 sessions on
-Forssmann. TBU</p>
+Forssmann. From supplementary Table 2 of Steinmetz et al. (2019), all 3
+sessions for Cori contained VIS-related regions. Only session from
+2017-11-01 and 2017-11-02 contain recordings from VIS for Forssmann.
+TBU</p>
 </div>
 <div id="data-structure" class="section level1">
 <h1>Data Structure</h1>
@@ -542,6 +551,8 @@ ggplot(data=temp_neuron_1_data,
 <div id="inferential-analysis" class="section level1">
 <h1>Inferential Analysis</h1>
 <p>Address Q1</p>
+<p>The “mouse name” and “session ID” are not i</p>
+<p>?QUESTION? SIMPLE RANDOMIZED EXPERIMENT? ANYTHING TO SAY?</p>
 <p>?QUESTION? SPLIT PLOT WHOLE PLOT DESIGN (PIAZZA)</p>
 <p>Factors: left contrast, right contrast, mourse name outcome: firing
 rate across all neurons within the given 0.4 (0.38 caclulated from the
@@ -551,6 +562,11 @@ timestamp difference from the data) seconds time interval.</p>
 <ol style="list-style-type: decimal">
 <li>Mixed effect model</li>
 </ol>
+<ul>
+<li>Random effect on the mice, Cori vs Forssmann</li>
+</ul>
+<p>?QUESTION? Causal effect, potential outcome framework for hypo
+testing? Is date a random effect? What to do with date?</p>
 </div>
 </div>
 <div id="reference" class="section level1">
